@@ -235,6 +235,9 @@ module Hyrax
     def redis_namespace
       @redis_namespace ||= "hyrax"
     end
+    deprecation_deprecate :redis_namespace= => "this option will be removed in Hyrax v3.0.0. " /
+                                               "Redis does not recommend using namespaces for data partitioning. " /
+                                               "Using Redis Databases or a new instance is recommended instead."
 
     attr_writer :libreoffice_path
     def libreoffice_path
