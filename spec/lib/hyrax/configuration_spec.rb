@@ -1,6 +1,16 @@
 RSpec.describe Hyrax::Configuration do
   subject { described_class.new }
 
+  describe '#admin_set_predicate' do
+    it 'warns that the default is in use' do
+      expect(Rails.logger)
+        .to receive(:warn)
+        .with(/default AdminSet membership predicate/)
+
+      subject.admin_set_predicate
+    end
+  end
+
   describe '#register_roles' do
     it 'yields a RoleRegistry' do
       expect { |b| subject.register_roles(&b) }.to yield_with_args(kind_of(Hyrax::RoleRegistry))

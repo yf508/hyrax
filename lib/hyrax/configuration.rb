@@ -299,7 +299,10 @@ module Hyrax
 
     attr_writer :admin_set_predicate
     def admin_set_predicate
-      @admin_set_predicate ||= ::RDF::Vocab::DC.isPartOf
+      @admin_set_predicate ||= begin
+        Rails.logger.warn 'You are using the default AdminSet membership predicate (`dcterms:isPartOf`). This default will be changed in Hyrax 3.0, requiring a data migration. If this is a new repository without existing content, you should set `Hyrax.config.admin_set_predicate` to `:RDF::Vocab::Samvera.memberOfAdminSet` to use the new default and avoid the migration. Set this option to `::RDF::DC.isPartOf` to silence this warning without changes.')
+        ::RDF::Vocab::DC.isPartOf
+      end
     end
 
     attr_writer :work_requires_files
