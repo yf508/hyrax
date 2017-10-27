@@ -28,4 +28,12 @@ RSpec.describe Hyrax::WorkChangeSetPersister, type: :model do
       expect { change_set_persister.delete(change_set: Hyrax::WorkChangeSet.new(delete_work)) }.to change { query_service.find_all_of_model(model: ::FileSet).count }.by(-1)
     end
   end
+
+  describe 'ensuring admin_sets' do
+    let(:work) { create_for_repository(:work) }
+
+    it 'sets the admin_set_id to the default admin_set is no admin_set_id is passed or already set on the object' do
+      binding.pry
+    end
+  end
 end

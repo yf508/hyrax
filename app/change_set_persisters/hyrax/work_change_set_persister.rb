@@ -3,6 +3,7 @@
 module Hyrax
   class WorkChangeSetPersister < ChangeSetPersister
     before_delete :cleanup_file_sets
+    before_save :ensure_admin_set
 
     # Deletes all file_sets that are members of the resource in the supplied change_set
     # @param [Hyrax::WorkChangeSet] the change_set that contains the resource whose member file_sets you wish to delete
@@ -12,6 +13,21 @@ module Hyrax
         Hyrax::FileSetChangeSet.new(file_set)
       end
       FileChangeSetPersister.new(metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), storage_adapter: Valkyrie.config.storage_adapter).delete_all(change_sets: change_sets)
+    end
+
+    def ensure_admin_set(change_set:)
+      # If admin_set id in the change_set, validate, blowup if bad id
+      # If no admin_set id in change_set AND resource has no admin_set, put in default_admin
+
+      new_admin_set_id = change_set.attributes.admin_set_id
+      if new_admin_set_id.nil? && resource.admin_set_id.nil?
+        change_.set.attributes[:admin_set_id] = AdminSet.find_or_create_default_admin_set_id
+      end
+
+      unless new_admin_set_id.nil?
+        #TODO raise argument error if new_admin_set_id doesn't point to a valid admin_set
+        Hyrax::PermissionTemplate.find_by(admin_set_id: change_set.attributes.admin_set_id.to_s) || create_permission_template!(admin_set_id: admin_set_id)
+      end
     end
   end
 end
