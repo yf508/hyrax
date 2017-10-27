@@ -18,14 +18,14 @@ module Hyrax
     def ensure_admin_set(change_set:)
       # If admin_set id in the change_set, validate, blowup if bad id
       # If no admin_set id in change_set AND resource has no admin_set, put in default_admin
-
-      new_admin_set_id = change_set.attributes.admin_set_id
-      if new_admin_set_id.nil? && resource.admin_set_id.nil?
-        change_.set.attributes[:admin_set_id] = AdminSet.find_or_create_default_admin_set_id
+      #binding.pry
+      if change_set.resource.admin_set_id.empty? && !change_set.changed?(:admin_set_id)
+        binding.pry
+        change_set.admin_set_id = AdminSet.find_or_create_default_admin_set_id
       end
 
-      unless new_admin_set_id.nil?
-        #TODO raise argument error if new_admin_set_id doesn't point to a valid admin_set
+      if change_set.changed?(:admin_set_id)
+        # TODO raise argument error if new_admin_set_id doesn't point to a valid admin_set
         Hyrax::PermissionTemplate.find_by(admin_set_id: change_set.attributes.admin_set_id.to_s) || create_permission_template!(admin_set_id: admin_set_id)
       end
     end

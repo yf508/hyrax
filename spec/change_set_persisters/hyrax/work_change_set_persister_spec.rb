@@ -33,7 +33,8 @@ RSpec.describe Hyrax::WorkChangeSetPersister, type: :model do
     let(:work) { create_for_repository(:work) }
 
     it 'sets the admin_set_id to the default admin_set is no admin_set_id is passed or already set on the object' do
-      binding.pry
+      change_set_persister.save(change_set: Hyrax::WorkChangeSet.new(work))
+      expect(query_service.find_by(id: work.id).admin_set_id).to eq(AdminSet::DEFAULT_ID)
     end
   end
 end
