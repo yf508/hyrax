@@ -66,8 +66,10 @@ module Hyrax
     # however it isn't a required field for someone to submit via json.
     # Set the first admin_set they have access to.
     def admin_set_id
-      admin_set = Hyrax::AdminSetService.new(search_context).search_results(:deposit).first
-      admin_set && admin_set.id
+      self.fields[:admin_set_id] || resource.admin_set_id
+      # binding.pry
+      # admin_set = Hyrax::AdminSetService.new(search_context).search_results(:deposit).first
+      # admin_set && admin_set.id
     end
   end
 end

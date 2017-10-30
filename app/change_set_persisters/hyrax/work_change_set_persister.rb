@@ -20,7 +20,7 @@ module Hyrax
       # If no admin_set id in change_set AND resource has no admin_set, put in default_admin
       #binding.pry
       if change_set.resource.admin_set_id.empty? && !change_set.changed?(:admin_set_id)
-        binding.pry
+        #binding.pry
         change_set.admin_set_id << AdminSet.find_or_create_default_admin_set_id
       end
 

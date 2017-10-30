@@ -16,9 +16,11 @@ module Hyrax
     # @return [TrueClass]
     # @see AdminSet
     def self.create_default_admin_set(admin_set_id:, title:)
-      admin_set = AdminSet.new(id: admin_set_id, title: Array.wrap(title))
+      binding.pry
+      admin_set_change_set = AdminSetChangeSet.new(resource: AdminSet.new, id: admin_set_id, title: Array.wrap(title))
       begin
-        new(admin_set: admin_set, creating_user: nil).create
+        change_set_persister = AdminSetChangeSetPersister.new(metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), storage_adapter: Valkyrie.config.storage_adapter)
+        change_set_persister.save(change_set: admin_set_change_set)
       rescue ActiveFedora::IllegalOperation
         # It is possible that another thread created the AdminSet just before this method
         # was called, so ActiveFedora will raise IllegalOperation. In this case we can safely
