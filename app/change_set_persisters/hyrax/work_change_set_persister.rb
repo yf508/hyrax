@@ -21,7 +21,7 @@ module Hyrax
       #binding.pry
       if change_set.resource.admin_set_id.empty? && !change_set.changed?(:admin_set_id)
         binding.pry
-        change_set.admin_set_id = AdminSet.find_or_create_default_admin_set_id
+        change_set.admin_set_id << AdminSet.find_or_create_default_admin_set_id
       end
 
       if change_set.changed?(:admin_set_id)
