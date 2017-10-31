@@ -17,7 +17,7 @@ module Hyrax
     # @see AdminSet
     def self.create_default_admin_set(admin_set_id:, title:)
       binding.pry
-      admin_set_change_set = AdminSetChangeSet.new(resource: AdminSet.new, id: admin_set_id, title: Array.wrap(title))
+      admin_set_change_set = AdminSetChangeSet.new(AdminSet.new, id: admin_set_id, title: Array.wrap(title))
       begin
         change_set_persister = AdminSetChangeSetPersister.new(metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), storage_adapter: Valkyrie.config.storage_adapter)
         change_set_persister.save(change_set: admin_set_change_set)
