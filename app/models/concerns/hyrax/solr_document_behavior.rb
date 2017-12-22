@@ -15,7 +15,7 @@ module Hyrax
 
     # Cast to a Valkyrie model
     def resource
-      @resource ||= Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.to_resource(object: to_h)
+      @resource ||= resource_factory.to_resource(object: to_h)
     end
 
     def title_or_label
@@ -93,5 +93,11 @@ module Hyrax
                         Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
                       end
     end
+
+    private
+
+      def resource_factory
+        Valkyrie::MetadataAdapter.find(:index_solr).resource_factory
+      end
   end
 end
