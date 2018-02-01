@@ -68,17 +68,7 @@ module Hyrax
 
     # @return FileSetPresenter presenter for the representative FileSets
     def representative_presenter
-      return nil if representative_id.blank?
-      @representative_presenter ||=
-        begin
-          result = member_presenters([representative_id]).first
-          return nil if result.try(:id) == id
-          if result.respond_to?(:representative_presenter)
-            result.representative_presenter
-          else
-            result
-          end
-        end
+      @representative_presenter ||= member_presenters([representative_id]).first
     end
 
     # Get presenters for the collections this work is a member of via the member_of_collections association.
