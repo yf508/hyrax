@@ -3,6 +3,8 @@ source 'https://rubygems.org'
 # Please see hyrax.gemspec for dependency information.
 gemspec
 
+gem 'hydra-editor', github: 'samvera/hydra-editor', branch: 'simple_form-update'
+
 group :development, :test do
   gem 'coveralls', require: false
   gem 'pry' unless ENV['CI']
