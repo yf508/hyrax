@@ -1,3 +1,5 @@
+require "dry/transaction/operation"
+
 module Hyrax
   module Transactions
     module Steps
