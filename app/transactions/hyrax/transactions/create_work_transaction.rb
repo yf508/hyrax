@@ -16,7 +16,6 @@ module Hyrax
       # step :validate_files, with: 'operations.validate_files'
       # step :apply_lease, with: 'operations.apply_lease'
       # step :apply_embargo, with: 'operations.apply_embargo'
-      # step :apply_visibility, with: 'operations.apply_visibility'
       step :set_default_admin_set, with: 'operations.set_default_admin_set'
       step :ensure_admin_set,  with: 'operations.ensure_admin_set'
       step :set_modified_date, with: 'operations.set_modified_date'

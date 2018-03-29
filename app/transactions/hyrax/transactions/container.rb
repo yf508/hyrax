@@ -58,10 +58,6 @@ module Hyrax
           Steps::AddCollectionParticipants.new
         end
 
-        ops.register "add_creation_data" do
-          Steps::AddCreationDataStep.new
-        end
-
         ops.register "find_collection_id" do
           Steps::FindCollectionIdStep.new
         end

@@ -36,6 +36,12 @@ RSpec.describe Hyrax::Transactions::CreateWorkTransaction do
         .from admin_set.id
     end
 
+    it 'sets visibility to restricted by default' do
+      expect { transaction.call(work) }
+        .not_to change { work.visibility }
+        .from Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+    end
+
     context 'without an admin_set_id' do
       let(:work) { build(:generic_work) }
 
@@ -43,6 +49,20 @@ RSpec.describe Hyrax::Transactions::CreateWorkTransaction do
         expect { transaction.call(work) }
           .to change { work.admin_set&.id }
           .to AdminSet.find_or_create_default_admin_set_id
+      end
+    end
+
+    context 'with public visibility' do
+      let(:visibility) do
+        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+      end
+
+      let(:work) { build(:generic_work, visibility: visibility ) }
+
+      it 'sets the default admin set' do
+        expect { transaction.call(work) }
+          .not_to change { work.visibility }
+          .from visibility
       end
     end
   end
