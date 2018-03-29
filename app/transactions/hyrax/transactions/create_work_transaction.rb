@@ -5,7 +5,7 @@ module Hyrax
     class CreateWorkTransaction
       include Dry::Transaction(container: Hyrax::Transactions::Container)
 
-      # TODO Put steps in the correct order
+      # TODO: Put steps in the correct order
       # step :find_collection_id, with: 'create_operations.find_collection_id'
       # step :ensure_admin_set, with: 'operations.ensure_admin_set'
       # step :assign_nested_attributes, with: 'operations.assign_nested_attributes'
@@ -17,6 +17,8 @@ module Hyrax
       # step :apply_lease, with: 'operations.apply_lease'
       # step :apply_embargo, with: 'operations.apply_embargo'
       # step :apply_visibility, with: 'operations.apply_visibility'
+      step :set_modified_date, with: 'operations.set_modified_date'
+      step :set_uploaded_date, with: 'create_operations.set_uploaded_date'
       step :save_work, with: 'operations.save_work'
       # step :attach_files, with: 'operations.attach_files'
       # step :initialize_workflow, with: 'create_operations.initialize_workflow'

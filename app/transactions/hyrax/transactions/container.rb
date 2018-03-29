@@ -12,6 +12,10 @@ module Hyrax
           Steps::SaveWorkStep.new
         end
 
+        ops.register "set_modified_date" do
+          Steps::SetModifiedDateStep.new
+        end
+
         ops.register "assign_nested_attributes" do
           Steps::AssignNestedAttributesStep.new
         end
@@ -60,6 +64,10 @@ module Hyrax
 
         ops.register "initialize_workflow" do
           Steps::InitializeWorkflowStep.new
+        end
+
+        ops.register "set_uploaded_date" do
+          Steps::SetUploadedDateStep.new
         end
 
         ops.register "transfer_request" do
