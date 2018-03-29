@@ -31,6 +31,18 @@ module Hyrax
         ops.register "ensure_admin_set" do
           Steps::EnsureAdminSetStep.new
         end
+
+        ops.register "apply_lease" do
+          Steps::ApplyLeaseStep.new
+        end
+
+        ops.register "apply_embargo" do
+          Steps::ApplyEmbargoStep.new
+        end
+
+        ops.register "apply_visibility" do
+          Steps::ApplyVisibilityStep.new
+        end
       end
 
       namespace "create_operations" do |ops|
@@ -55,13 +67,31 @@ module Hyrax
         end
       end
 
+      namespace "update_operations" do |ops|
+        ops.register "validate_optimistic_lock" do
+          Steps::ValidateOptimisticLockStep.new
+        end
+
+        ops.register "cleanup_featured_works_when_private" do
+          Steps::CleanupFeaturedWorksWhenPrivateStep.new
+        end
+
+        ops.register "attach_members" do
+          Steps::AttachMembersStep.new
+        end
+
+        ops.register "apply_order" do
+          Steps::ApplyOrderStep.new
+        end
+      end
+
       namespace "delete_operations" do |ops|
         ops.register "cleanup_file_sets" do
           Steps::CleanupFileSetsStep.new
         end
 
-        ops.register "cleanup_featured_work" do
-          Steps::CleanupFeaturedWorkStep.new
+        ops.register "cleanup_featured_works" do
+          Steps::CleanupFeaturedWorksStep.new
         end
 
         ops.register "delete_work" do
