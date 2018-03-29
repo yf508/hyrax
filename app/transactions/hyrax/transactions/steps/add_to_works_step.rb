@@ -47,5 +47,6 @@ module Hyrax::Transactions::Steps
             work.errors[:in_works_ids] << "Works can only be related to each other if user has ability to edit both."
           end
         end
+      end
   end
 end
