@@ -3,7 +3,7 @@ require "dry/transaction/operation"
 module Hyrax
   module Transactions
     module Steps
-      class CleanupFeaturedWorkStep
+      class CleanupFeaturedWorksStep
         include Dry::Transaction::Operation
 
         def call(work)
