@@ -15,6 +15,22 @@ module Hyrax
         ops.register "assign_nested_attributes" do
           Steps::AssignNestedAttributesStep.new
         end
+
+        ops.register "attach_files" do
+          Steps::AttachFilesStep.new
+        end
+
+        ops.register "attach_remote_files" do
+          Steps::AttachRemoteFilesStep.new
+        end
+
+        ops.register "validate_files" do
+          Steps::ValidateFilesStep.new
+        end
+
+        ops.register "ensure_admin_set" do
+          Steps::EnsureAdminSetStep.new
+        end
       end
 
       namespace "create_operations" do |ops|
@@ -28,6 +44,14 @@ module Hyrax
 
         ops.register "find_collection_id" do
           Steps::FindCollectionIdStep.new
+        end
+
+        ops.register "initialize_workflow" do
+          Steps::InitializeWorkflowStep.new
+        end
+
+        ops.register "transfer_request" do
+          Steps::TransferRequestStep.new
         end
       end
 
