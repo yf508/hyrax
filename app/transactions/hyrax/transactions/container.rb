@@ -36,6 +36,10 @@ module Hyrax
           Steps::EnsureAdminSetStep.new
         end
 
+        ops.register "set_default_admin_set" do
+          Steps::SetDefaultAdminSetStep.new
+        end
+
         ops.register "apply_lease" do
           Steps::ApplyLeaseStep.new
         end
