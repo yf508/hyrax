@@ -1,4 +1,4 @@
-embargorequire "dry/transaction/operation"
+require "dry/transaction/operation"
 
 module Hyrax
   module Transactions
