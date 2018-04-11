@@ -69,6 +69,8 @@ module Hyrax
       require 'power_converters'
       require 'dry/struct'
       require 'dry/equalizer'
+      require "dry/transaction"
+      require "dry/transaction/operation"
       require 'dry/validation'
     end
 

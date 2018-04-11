@@ -35,6 +35,10 @@ FactoryBot.define do
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
 
+    factory :invalid_generic_work do
+      title nil
+    end
+
     factory :private_work do
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
     end
