@@ -2,12 +2,12 @@ require 'spec_helper'
 
 RSpec.describe 'hyrax/admin/collection_types/index.html.erb', type: :view, clean_repo: true do
   before do
-    assign(:collection_types, [
-             create(:user_collection_type),
-             create(:admin_set_collection_type),
-             FactoryBot.create(:collection_type, title: 'Test Title 1'),
-             FactoryBot.create(:collection_type, title: 'Test Title 2')
-           ])
+    assign(:collection_types, Hyrax::Admin::CollectionTypesPresenter.new([
+                                                                           create(:user_collection_type),
+                                                                           create(:admin_set_collection_type),
+                                                                           FactoryBot.create(:collection_type, title: 'Test Title 1'),
+                                                                           FactoryBot.create(:collection_type, title: 'Test Title 2')
+                                                                         ]))
     render
   end
 
