@@ -5,7 +5,7 @@ module Hyrax
         include Dry::Transaction::Operation
 
         def call(work)
-          work.save ? Success(work) : Failure(:not_saved)
+          work.save ? Success(work) : Failure(work.errors)
         end
       end
     end

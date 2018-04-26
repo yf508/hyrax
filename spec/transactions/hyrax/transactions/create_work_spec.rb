@@ -19,6 +19,10 @@ RSpec.describe Hyrax::Transactions::CreateWork do
       it 'does not save the work' do
         expect { transaction.call(work) }.not_to change { work.new_record? }.from true
       end
+
+      it 'gives errors for the work' do
+        expect(transaction.call(work).failure).to eq work.errors
+      end
     end
 
     it 'is a success' do
@@ -53,6 +57,18 @@ RSpec.describe Hyrax::Transactions::CreateWork do
       allow(Hyrax::TimeService).to receive(:time_in_utc).and_return(xmas)
 
       expect { transaction.call(work) }.to change { work.date_uploaded }.to xmas
+    end
+  end
+
+  context 'when visibility is set' do
+    let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
+
+    before { work.visibility = visibility }
+
+    it 'keeps the visibility' do
+      expect { transaction.call(work) }
+        .not_to change { work.visibility }
+        .from visibility
     end
   end
 
