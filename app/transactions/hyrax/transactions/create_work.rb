@@ -5,7 +5,6 @@ module Hyrax
 
       step :set_default_admin_set,      with: 'work.set_default_admin_set'
       step :ensure_admin_set,           with: 'work.ensure_admin_set'
-      step :ensure_permission_template, with: 'work.ensure_permission_template'
       step :apply_permission_template,  with: 'work.apply_permission_template'
       step :set_modified_date,          with: 'work.set_modified_date'
       step :set_uploaded_date,          with: 'work.set_uploaded_date'
