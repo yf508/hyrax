@@ -18,15 +18,19 @@ RSpec.describe Hyrax::Transactions::Steps::ApplyPermissionTemplate do
     end
 
     context 'with users and groups' do
-      let(:admin_set)    { AdminSet.find(template.source_id) }
-      let(:manage_users) { create_list(:user, 2) }
-      let(:view_users)   { create_list(:user, 2) }
+      let(:admin_set)     { AdminSet.find(template.source_id) }
+      let(:manage_users)  { create_list(:user, 2) }
+      let(:manage_groups) { ['edit_group_1', 'edit_group_2'] }
+      let(:view_users)    { create_list(:user, 2) }
+      let(:view_groups)   { ['read_group_1', 'read_group_2'] }
 
       let(:template) do
         create(:permission_template,
                with_admin_set: true,
-               manage_users: manage_users,
-               view_users:   view_users)
+               manage_users:   manage_users,
+               manage_groups:  manage_groups,
+               view_users:     view_users,
+               view_groups:    view_groups)
       end
 
       it 'assigns edit users from template' do
@@ -35,10 +39,22 @@ RSpec.describe Hyrax::Transactions::Steps::ApplyPermissionTemplate do
           .to include(*manage_users.map(&:user_key))
       end
 
-      it 'assigns edit users from template' do
+      it 'assigns edit groups from template' do
+        expect { step.call(work) }
+          .to change { work.edit_groups }
+          .to include(*manage_groups)
+      end
+
+      it 'assigns read users from template' do
         expect { step.call(work) }
           .to change { work.read_users }
           .to include(*view_users.map(&:user_key))
+      end
+
+      it 'assigns read groups from template' do
+        expect { step.call(work) }
+          .to change { work.read_groups }
+          .to include(*view_groups)
       end
     end
 

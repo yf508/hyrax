@@ -112,11 +112,16 @@ RSpec.describe Hyrax::Transactions::CreateWork do
       let(:manage_users) { create_list(:user, 2) }
       let(:view_users)   { create_list(:user, 2) }
 
+      let(:manage_groups) { ['manage_group_1', 'manage_group_2'] }
+      let(:view_groups)   { ['view_group_1', 'view_group_2'] }
+
       let(:template) do
         create(:permission_template,
                with_admin_set: true,
-               manage_users: manage_users,
-               view_users:   view_users)
+               manage_users:  manage_users,
+               manage_groups: manage_groups,
+               view_users:    view_users,
+               view_groups:   view_groups)
       end
 
       it 'assigns edit users from template' do
@@ -125,7 +130,11 @@ RSpec.describe Hyrax::Transactions::CreateWork do
           .to include(*manage_users.map(&:user_key))
       end
 
-      it 'assigns edit groups from template'
+      it 'assigns edit groups from template' do
+        expect { transaction.call(work) }
+          .to change { work.edit_groups }
+          .to include(*manage_groups)
+      end
 
       it 'assigns read users from template' do
         expect { transaction.call(work) }
@@ -133,7 +142,11 @@ RSpec.describe Hyrax::Transactions::CreateWork do
           .to include(*view_users.map(&:user_key))
       end
 
-      it 'assigns read groups from template'
+      it 'assigns read groups from template' do
+        expect { transaction.call(work) }
+          .to change { work.read_groups }
+          .to include(*view_groups)
+      end
     end
   end
 end
