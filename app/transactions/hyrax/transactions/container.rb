@@ -4,6 +4,10 @@ module Hyrax
       extend Dry::Container::Mixin
 
       namespace 'work' do |ops|
+        ops.register 'apply_permission_template' do
+          Steps::ApplyPermissionTemplate.new
+        end
+
         ops.register 'ensure_admin_set' do
           Steps::EnsureAdminSet.new
         end
