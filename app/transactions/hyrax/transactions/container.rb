@@ -3,9 +3,27 @@ module Hyrax
     class Container
       extend Dry::Container::Mixin
 
+      # Disable block length for DSL
+      # rubocop:disable Metrics/BlockLength
       namespace 'work' do |ops|
         ops.register 'apply_permission_template' do
           Steps::ApplyPermissionTemplate.new
+        end
+
+        ops.register 'cleanup_features' do
+          Steps::CleanupFeatures.new
+        end
+
+        ops.register 'cleanup_trophies' do
+          Steps::CleanupTrophies.new
+        end
+
+        ops.register 'destroy_file_sets' do
+          Steps::DestroyFileSets.new
+        end
+
+        ops.register 'destroy_work' do
+          Steps::DestroyWork.new
         end
 
         ops.register 'ensure_admin_set' do
@@ -31,6 +49,7 @@ module Hyrax
         ops.register 'set_uploaded_date' do
           Steps::SetUploadedDate.new
         end
+        # rubocop:enable Metrics/BlockLength
       end
     end
   end
