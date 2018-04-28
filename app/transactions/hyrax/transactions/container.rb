@@ -8,6 +8,22 @@ module Hyrax
           Steps::ApplyPermissionTemplate.new
         end
 
+        ops.register 'cleanup_features' do
+          Steps::CleanupFeatures.new
+        end
+
+        ops.register 'cleanup_trophies' do
+          Steps::CleanupTrophies.new
+        end
+
+        ops.register 'destroy_file_sets' do
+          Steps::DestroyFileSets.new
+        end
+
+        ops.register 'destroy_work' do
+          Steps::DestroyWork.new
+        end
+
         ops.register 'ensure_admin_set' do
           Steps::EnsureAdminSet.new
         end
