@@ -3,6 +3,7 @@ module Hyrax
     class CreateWork
       include Dry::Transaction(container: Hyrax::Transactions::Container)
 
+      step :apply_attributes,           with: 'work.apply_attributes'
       step :set_default_admin_set,      with: 'work.set_default_admin_set'
       step :ensure_admin_set,           with: 'work.ensure_admin_set'
       step :apply_permission_template,  with: 'work.apply_permission_template'

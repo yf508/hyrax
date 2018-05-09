@@ -26,6 +26,52 @@ RSpec.describe Hyrax::Transactions::CreateWork do
       end
     end
 
+    context 'with valid attributes' do
+      let(:attributes) do
+        attributes_for(:generic_work, creator: ['Moomin'], subject: ['Snorks'])
+      end
+
+      it 'is a success' do
+        result = transaction
+                   .with_step_args(apply_attributes: [{ attributes: attributes }])
+                   .call(work)
+
+        expect(result).to be_success
+      end
+
+      it 'applies the attributes' do
+        transaction
+          .with_step_args(apply_attributes: [{ attributes: attributes }])
+          .call(work)
+
+        expect(work).to have_attributes attributes
+      end
+    end
+
+    context 'with missing attributes' do
+      let(:attributes) { { title: ['moomin'], not_real: ['very fake'] } }
+
+      it 'is a failure' do
+        result = transaction
+                   .with_step_args(apply_attributes: [{ attributes: attributes }])
+                   .call(work)
+
+        expect(result).to be_failure
+      end
+    end
+
+    context 'with invalid attributes' do
+      let(:attributes) { attributes_for(:invalid_generic_work) }
+
+      it 'is a failure' do
+        result = transaction
+                   .with_step_args(apply_attributes: [{ attributes: attributes }])
+                   .call(work)
+
+        expect(result).to be_failure
+      end
+    end
+
     it 'is a success' do
       expect(transaction.call(work)).to be_success
     end
