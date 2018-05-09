@@ -6,6 +6,10 @@ module Hyrax
       # Disable block length for DSL
       # rubocop:disable Metrics/BlockLength
       namespace 'work' do |ops|
+        ops.register 'apply_attributes' do
+          Steps::ApplyAttributes.new
+        end
+
         ops.register 'apply_permission_template' do
           Steps::ApplyPermissionTemplate.new
         end

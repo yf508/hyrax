@@ -4,26 +4,8 @@ RSpec.describe Hyrax::Actors::DryDestroyActor do
   let(:ability)    { :no_ability }
   let(:attrs)      { {} }
   let(:env)        { Hyrax::Actors::Environment.new(work, ability, attrs) }
-  let(:next_actor) { spy_actor_class.new }
+  let(:next_actor) { SpyActor.new }
   let(:work)       { build(:generic_work) }
-
-  let(:spy_actor_class) do
-    Class.new do
-      attr_accessor :created, :updated, :destroyed
-
-      def create(_env)
-        self.created = true
-      end
-
-      def update(_env)
-        self.updated = true
-      end
-
-      def destroy(_env)
-        self.destroyed = true
-      end
-    end
-  end
 
   describe '#create' do
     it 'passes through to next actor' do
