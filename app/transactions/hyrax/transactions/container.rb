@@ -4,6 +4,10 @@ module Hyrax
       extend Dry::Container::Mixin
 
       namespace 'work' do |ops|
+        ops.register 'add_to_works' do
+          Steps::AddToWorks.new
+        end
+
         ops.register 'apply_attributes' do
           Steps::ApplyAttributes.new
         end

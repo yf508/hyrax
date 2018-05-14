@@ -125,6 +125,19 @@ RSpec.describe Hyrax::Transactions::CreateWork do
     end
   end
 
+  context 'when adding to works' do
+    let(:other_works)    { create_list(:generic_work, 2) }
+    let(:other_work_ids) { other_works.map(&:id) }
+
+    it 'adds new work as member' do
+      result = transaction
+                 .with_step_args(add_to_works: [{ work_ids: other_work_ids }])
+                 .call(work)
+
+      expect(work.member_of.map(&:id)).to contain_exactly(*other_work_ids)
+    end
+  end
+
   context 'with an admin set' do
     let(:admin_set) { AdminSet.find(template.source_id) }
     let(:template)  { create(:permission_template, with_admin_set: true) }
