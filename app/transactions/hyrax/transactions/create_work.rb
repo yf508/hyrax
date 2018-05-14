@@ -10,6 +10,7 @@ module Hyrax
       step :set_modified_date,          with: 'work.set_modified_date'
       step :set_uploaded_date,          with: 'work.set_uploaded_date'
       step :save_work,                  with: 'work.save_work'
+      step :add_to_works,               with: 'work.add_to_works'
     end
   end
 end
