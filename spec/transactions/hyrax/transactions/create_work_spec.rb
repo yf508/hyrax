@@ -1,7 +1,7 @@
 RSpec.describe Hyrax::Transactions::CreateWork do
   subject(:transaction) { described_class.new }
   let(:template)        { Hyrax::PermissionTemplate.find_by!(source_id: work.admin_set_id) }
-  let(:work)            { build(:generic_work) }
+  let(:work)            { build(:work_without_access) }
   let(:xmas)            { DateTime.parse('2018-12-25 11:30').iso8601 }
 
   before do
@@ -23,6 +23,26 @@ RSpec.describe Hyrax::Transactions::CreateWork do
 
       it 'gives errors for the work' do
         expect(transaction.call(work).failure).to eq work.errors
+      end
+    end
+
+    context 'with a depositor' do
+      let(:depositor) { create(:admin) }
+
+      it 'is a success' do
+        result = transaction
+                   .with_step_args(set_depositor: [{ depositor: depositor }])
+                   .call(work)
+
+        expect(result).to be_success
+      end
+
+      it 'sets the depositor' do
+        transaction
+          .with_step_args(set_depositor: [{ depositor: depositor }])
+          .call(work)
+
+        expect(work.depositor).to eq depositor.user_key
       end
     end
 
@@ -106,11 +126,7 @@ RSpec.describe Hyrax::Transactions::CreateWork do
       expect { transaction.call(work) }.to change { work.date_uploaded }.to xmas
     end
 
-    it 'grants edit permission to depositor' do
-      transaction.call(work)
-
-      expect(work.edit_users).to include work.depositor
-    end
+    it 'applies permission template'
   end
 
   context 'when visibility is set' do

@@ -48,6 +48,10 @@ module Hyrax
           Steps::SetDefaultAdminSet.new
         end
 
+        ops.register 'set_depositor' do
+          Steps::SetDepositor.new
+        end
+
         ops.register 'set_modified_date' do
           Steps::SetModifiedDate.new
         end
