@@ -122,4 +122,15 @@ class TestAppGenerator < Rails::Generators::Base
               "development:\n  adapter: async",
               "development:\n  adapter: redis\n  url: redis://localhost:6379"
   end
+
+  def copy_database_yml_on_travis
+    if ENV['CI']
+      copy_file 'config/database.yml', 'config/database.yml', force: true
+      gem 'pg', '~>0.18'
+
+      Bundler.with_clean_env do
+        run "bundle install"
+      end
+    end
+  end
 end

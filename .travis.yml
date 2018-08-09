@@ -29,5 +29,9 @@ env:
 
 services:
   - redis-server
+  - postgresql
+
 before_script:
   - jdk_switcher use oraclejdk8
+  - psql -c 'create database travis_ci_dev;' -U postgres
+  - psql -c 'create database travis_ci_test;' -U postgres

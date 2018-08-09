@@ -6,6 +6,7 @@ gemspec
 group :development, :test do
   gem 'coveralls', require: false
   gem 'i18n-tasks'
+  gem 'pg', '~>0.18' if ENV['CI']
   gem 'pry' unless ENV['CI']
   gem 'pry-byebug' unless ENV['CI']
   gem "simplecov", require: false
