@@ -6,6 +6,10 @@
 module Wings
 end
 
+
 require 'valkyrie'
 require 'wings/resource_factory'
+require 'wings/valkyrizable'
 require 'wings/valkyrie_monkey_patch'
+
+ActiveFedora::Base.include Wings::Valkyrizable
