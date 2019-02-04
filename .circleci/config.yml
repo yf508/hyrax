@@ -13,6 +13,30 @@ executors:
       BUNDLE_JOBS: 4
       BUNDLE_RETRY: 3
 
+  samvera-stack-ruby-2-4-5:
+    docker:
+    - image: circleci/ruby:2.4.5-node-browsers-legacy
+    - image: circleci/redis:4
+    - image: ualbertalib/docker-fcrepo4:4.7
+      environment:
+        CATALINA_OPTS: "-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC"
+    - image: solr:7-alpine
+      command: bin/solr -cloud -noprompt -f -p 8985
+
+    working_directory: ~/hyrax
+
+    environment:
+      BUNDLE_PATH: ~/bundle
+      BUNDLE_JOBS: 4
+      BUNDLE_RETRY: 3
+      RAILS_ENV: test
+      RACK_ENV: test
+      FCREPO_TEST_PORT: 8080/fcrepo
+      NOKOGIRI_USE_SYSTEM_LIBRARIES: true
+      ENGINE_CART_RAILS_OPTIONS: --skip-git --skip-bundle --skip-listen --skip-spring --skip-yarn --skip-keeps --skip-action-cable --skip-coffee --skip-puma --skip-test
+      SPEC_OPTS: --profile 10 --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
+      COVERALLS_PARALLEL: true
+
   samvera-stack-ruby-2-5-3:
     docker:
     - image: circleci/ruby:2.5.3-node-browsers-legacy
@@ -78,28 +102,7 @@ jobs:
         command: bundle exec rubocop
 
   build:
-    docker:
-    - image: circleci/ruby:2.5.3-node-browsers-legacy
-    - image: circleci/redis:4
-    - image: ualbertalib/docker-fcrepo4:4.7
-      environment:
-        CATALINA_OPTS: "-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC"
-    - image: solr:7-alpine
-      command: bin/solr -cloud -noprompt -f -p 8985
-
-    working_directory: ~/hyrax
-
-    environment:
-      BUNDLE_PATH: ~/bundle
-      BUNDLE_JOBS: 4
-      BUNDLE_RETRY: 3
-      RAILS_ENV: test
-      RACK_ENV: test
-      FCREPO_TEST_PORT: 8080/fcrepo
-      NOKOGIRI_USE_SYSTEM_LIBRARIES: true
-      ENGINE_CART_RAILS_OPTIONS: --skip-git --skip-bundle --skip-listen --skip-spring --skip-yarn --skip-keeps --skip-action-cable --skip-coffee --skip-puma --skip-test
-      SPEC_OPTS: --profile 10 --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
-      COVERALLS_PARALLEL: true
+    executor: samvera-stack-ruby-2-5-3
 
     steps:
     - attach_workspace:
@@ -119,10 +122,37 @@ jobs:
         - bundle/*
         - bundle/**/*
 
-  test:
-    executor:
-      name: samvera-stack-ruby-2-5-3
+  test-ruby-2-4-5:
+    executor: samvera-stack-ruby-2-4-5
+    parallelism: 4
 
+    steps:
+    - attach_workspace:
+        at: ~/
+
+    - run:
+        name: Load config into SolrCloud
+        command: |
+          cd .internal_test_app/solr/config
+          zip -1 -r solr_hyrax_config.zip ./*
+          curl -H "Content-type:application/octet-stream" --data-binary @solr_hyrax_config.zip "http://localhost:8985/solr/admin/configs?action=UPLOAD&name=hyrax"
+          curl -H 'Content-type: application/json' http://localhost:8985/api/collections/ -d '{create: {name: hydra-test, config: hyrax, numShards: 1}}'
+
+    - run:
+        name: Run rspec in parallel
+        command: |
+          mkdir /tmp/test-results
+          bundle exec rspec $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+
+    # collect reports
+    - store_test_results:
+        path: /tmp/test-results
+    - store_artifacts:
+        path: /tmp/test-results
+        destination: test-results
+
+  test-ruby-2-5-3:
+    executor: samvera-stack-ruby-2-5-3
     parallelism: 4
 
     steps:
@@ -161,7 +191,12 @@ workflows:
       - build:
           requires:
             - bundle
-      - test:
+      - test-ruby-2-5-3:
+          requires:
+            - build
+            - lint
+
+      - test-ruby-2-4-5:
           requires:
             - build
             - lint
