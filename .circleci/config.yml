@@ -38,7 +38,6 @@ jobs:
         keys:
         - source-v1-{{ .Branch }}-{{ .Revision }}
         - source-v1-{{ .Branch }}-
-        - source-v1-
 
     - checkout
 
