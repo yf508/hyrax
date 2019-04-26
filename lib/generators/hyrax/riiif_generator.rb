@@ -33,7 +33,7 @@ class Hyrax::RiiifGenerator < Rails::Generators::Base
 
   def override_image_url_builder_in_hyrax_config
     insert_into_file 'config/initializers/hyrax.rb', before: /^  # config.iiif_image_url_builder/ do
-      "  config.iiif_image_url_builder = lambda do |file_id, base_url, size|\n" \
+      "  config.iiif_image_url_builder = lambda do |file_id, base_url, size, format|\n" \
       "    Riiif::Engine.routes.url_helpers.image_url(file_id, host: base_url, size: size)\n" \
       "  end\n"
     end

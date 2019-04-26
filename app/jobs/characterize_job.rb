@@ -25,6 +25,8 @@ class CharacterizeJob < Hyrax::ApplicationJob
     end
 
     def channels(filepath)
+      ch = Riiif::ImageMagickInfoExtractor.new(filepath).extract[:channels]
+      raise StandardError if ch.nil?
       [Riiif::ImageMagickInfoExtractor.new(filepath).extract[:channels]]
     rescue StandardError
       []
