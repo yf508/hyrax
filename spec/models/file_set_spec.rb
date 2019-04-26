@@ -93,6 +93,7 @@ RSpec.describe FileSet do
       expect(subject).to respond_to(:license)
       expect(subject).to respond_to(:resource_type)
       expect(subject).to respond_to(:identifier)
+      expect(subject).to respond_to(:current_file_version)
     end
     it 'has properties from characterization metadata' do
       expect(subject).to respond_to(:format_label)
