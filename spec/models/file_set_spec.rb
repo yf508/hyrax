@@ -101,6 +101,7 @@ RSpec.describe FileSet do
       expect(subject).to respond_to(:last_modified)
       expect(subject).to respond_to(:filename)
       expect(subject).to respond_to(:original_checksum)
+      expect(subject).to respond_to(:channels)
       expect(subject).to respond_to(:well_formed)
       expect(subject).to respond_to(:page_count)
       expect(subject).to respond_to(:file_title)

@@ -20,7 +20,7 @@ module Hyrax
         self.characterization_terms = [
           :format_label, :file_size, :height, :width, :filename, :well_formed,
           :page_count, :file_title, :last_modified, :original_checksum,
-          :duration, :sample_rate
+          :duration, :sample_rate, :channels
         ]
         self.characterization_proxy = :original_file
 

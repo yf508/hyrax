@@ -101,6 +101,10 @@ module Hyrax
       def original_checksum
         self[ActiveFedora.index_field_mapper.solr_name("original_checksum")]
       end
+      
+      def channels
+        self[ActiveFedora.index_field_mapper.solr_name("channels")]
+      end
     end
   end
 end
